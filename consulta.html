@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Consulta de fabricação - Tersetec</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #ffffff;
+      color: #000000;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    main {
+      width: min(100%, 1280px);
+      margin: 0 auto;
+      padding: 64px 16px 48px;
+    }
+    .logo {
+      display: block;
+      width: min(58vw, 700px);
+      height: auto;
+      max-height: 230px;
+      margin: 0 auto 70px;
+      object-fit: contain;
+      clip-path: inset(0 1px 1px 0);
+    }
+    dl { margin: 0; }
+    .item {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      padding: 24px 0;
+      white-space: nowrap;
+    }
+    dt {
+      color: #000000;
+      font-size: clamp(38px, 6vw, 82px);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    dd {
+      margin: 0;
+      font-size: clamp(38px, 6vw, 82px);
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    .erro {
+      display: none;
+      padding: 16px;
+      border-left: 4px solid #b42318;
+      background: #fff1f0;
+      color: #7a271a;
+    }
+    @media (max-width: 700px) {
+      main { padding: 36px 20px 28px; }
+      .logo {
+        width: min(90vw, 430px);
+        max-height: 160px;
+        margin-bottom: 42px;
+      }
+      .item {
+        display: block;
+        padding: 18px 0;
+        white-space: normal;
+      }
+      dt, dd { font-size: clamp(28px, 7.5vw, 48px); }
+      dt { margin-bottom: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="logo_tersetec.png" alt="Tersetec Móveis e Ambientes">
+    <div id="erro" class="erro" role="alert">O endereço deste QR Code está incompleto ou contém datas inválidas.</div>
+    <dl id="dados">
+      <div class="item">
+        <dt>Data de fabricação:</dt>
+        <dd id="fabricacao"></dd>
+      </div>
+      <div class="item">
+        <dt>Data de entrega:</dt>
+        <dd id="entrega"></dd>
+      </div>
+    </dl>
+  </main>
+  <script>
+    const parametros = new URLSearchParams(window.location.search);
+    const formatoData = /^(0[1-9]|1[0-2])\/\d{4}$/;
+    const fabricacao = parametros.get("fabricacao") || "";
+    const entrega = parametros.get("entrega") || "";
+    const valido = formatoData.test(fabricacao) && formatoData.test(entrega);
+
+    document.getElementById("dados").hidden = !valido;
+    document.getElementById("erro").style.display = valido ? "none" : "block";
+    if (valido) {
+      document.getElementById("fabricacao").textContent = fabricacao;
+      document.getElementById("entrega").textContent = entrega;
+    }
+  </script>
+</body>
+</html>
