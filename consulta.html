@@ -28,6 +28,7 @@
       object-fit: contain;
       clip-path: inset(0 1px 1px 0);
     }
+    .logo[hidden] { display: none; }
     dl { margin: 0; }
     .item {
       display: flex;
@@ -74,7 +75,7 @@
 </head>
 <body>
   <main>
-    <img class="logo" src="logo_tersetec.png" alt="Tersetec Móveis e Ambientes">
+    <img id="logo" class="logo" src="logo_tersetec.png" alt="Tersetec Móveis e Ambientes" hidden>
     <div id="erro" class="erro" role="alert">O endereço deste QR Code está incompleto ou contém datas inválidas.</div>
     <dl id="dados">
       <div class="item">
@@ -92,8 +93,10 @@
     const formatoData = /^(0[1-9]|1[0-2])\/\d{4}$/;
     const fabricacao = parametros.get("fabricacao") || "";
     const entrega = parametros.get("entrega") || "";
+    const mostrarLogo = parametros.get("logo") === "1";
     const valido = formatoData.test(fabricacao) && formatoData.test(entrega);
 
+    document.getElementById("logo").hidden = !mostrarLogo;
     document.getElementById("dados").hidden = !valido;
     document.getElementById("erro").style.display = valido ? "none" : "block";
     if (valido) {
