@@ -26,7 +26,7 @@
       max-height: 230px;
       margin: 0 auto 70px;
       object-fit: contain;
-      clip-path: inset(0 1px 1px 0);
+      clip-path: inset(0 3px 3px 0);
     }
     .logo[hidden] { display: none; }
     dl { margin: 0; }
@@ -37,6 +37,8 @@
       padding: 24px 0;
       white-space: nowrap;
     }
+    .dados-centro .item { justify-content: center; }
+    .dados-direita .item { justify-content: flex-end; }
     dt {
       color: #000000;
       font-size: clamp(38px, 6vw, 82px);
@@ -67,7 +69,11 @@
         display: block;
         padding: 18px 0;
         white-space: normal;
+        max-width: 100%;
+        overflow-wrap: anywhere;
       }
+      .dados-centro .item { text-align: center; }
+      .dados-direita .item { text-align: right; }
       dt, dd { font-size: clamp(28px, 7.5vw, 48px); }
       dt { margin-bottom: 6px; }
     }
@@ -94,9 +100,20 @@
     const fabricacao = parametros.get("fabricacao") || "";
     const entrega = parametros.get("entrega") || "";
     const mostrarLogo = parametros.get("logo") === "1";
+    const posicaoLogo = parametros.get("posicao_logo") === "abaixo" ? "abaixo" : "acima";
+    const alinhamento = parametros.get("alinhamento") || "esquerda";
     const valido = formatoData.test(fabricacao) && formatoData.test(entrega);
 
-    document.getElementById("logo").hidden = !mostrarLogo;
+    const logo = document.getElementById("logo");
+    const dados = document.getElementById("dados");
+    logo.hidden = !mostrarLogo || !valido;
+    dados.classList.toggle("dados-centro", alinhamento === "centro");
+    dados.classList.toggle("dados-direita", alinhamento === "direita");
+    if (mostrarLogo && posicaoLogo === "abaixo") {
+      dados.insertAdjacentElement("afterend", logo);
+      logo.style.marginTop = "58px";
+      logo.style.marginBottom = "0";
+    }
     document.getElementById("dados").hidden = !valido;
     document.getElementById("erro").style.display = valido ? "none" : "block";
     if (valido) {
